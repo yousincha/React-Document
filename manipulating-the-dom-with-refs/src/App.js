@@ -222,30 +222,163 @@
 //   });
 // }
 
-// ref를 이용한 DOM 조작 사례
-import { useState, useRef } from "react";
+// // ref를 이용한 DOM 조작 사례
+// import { useState, useRef } from "react";
 
-export default function Counter() {
-  const [show, setShow] = useState(true);
-  const ref = useRef(null);
+// export default function Counter() {
+//   const [show, setShow] = useState(true);
+//   const ref = useRef(null);
 
+//   return (
+//     <div>
+//       <button
+//         onClick={() => {
+//           setShow(!show);
+//         }}
+//       >
+//         Toggle with setState
+//       </button>
+//       <button
+//         onClick={() => {
+//           ref.current.remove();
+//         }}
+//       >
+//         Remove from the DOM
+//       </button>
+//       {show && <p ref={ref}>Hello world</p>}
+//     </div>
+//   );
+// }
+
+// // 도전1. 동영상 재생 및 일시 정지하기
+// import { useState, useRef } from "react";
+
+// export default function VideoPlayer() {
+//   const [isPlaying, setIsPlaying] = useState(false);
+//   const ref = useRef(null);
+
+//   function handleClick() {
+//     const nextIsPlaying = !isPlaying;
+//     setIsPlaying(nextIsPlaying);
+
+//     if (nextIsPlaying) {
+//       ref.current.play();
+//     } else {
+//       ref.current.pause();
+//     }
+//   }
+
+//   return (
+//     <>
+//       <button onClick={handleClick}>{isPlaying ? "Pause" : "Play"}</button>
+//       <video
+//         width="250"
+//         ref={ref}
+//         onPlay={() => setIsPlaying(true)}
+//         onPause={() => setIsPlaying(false)}
+//       >
+//         <source
+//           src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
+//           type="video/mp4"
+//         />
+//       </video>
+//     </>
+//   );
+// }
+
+// // 도전2. 검색 필드에 초점 맞추기
+// import { useRef } from "react";
+
+// export default function Page() {
+//   const inputRef = useRef(null);
+//   return (
+//     <>
+//       <nav>
+//         <button
+//           onClick={() => {
+//             inputRef.current.focus();
+//           }}
+//         >
+//           Search
+//         </button>
+//       </nav>
+//       <input ref={inputRef} placeholder="Looking for something?" />
+//     </>
+//   );
+// }
+
+// // 도전3. 이미지 캐러셀 스크롤하기
+// import { useRef, useState } from "react";
+// import { flushSync } from "react-dom";
+
+// export default function CatFriends() {
+//   const selectedRef = useRef(null);
+//   const [index, setIndex] = useState(0);
+
+//   return (
+//     <>
+//       <nav>
+//         <button
+//           onClick={() => {
+//             flushSync(() => {
+//               if (index < catList.length - 1) {
+//                 setIndex(index + 1);
+//               } else {
+//                 setIndex(0);
+//               }
+//             });
+//             selectedRef.current.scrollIntoView({
+//               behavior: "smooth",
+//               block: "nearest",
+//               inline: "center",
+//             });
+//           }}
+//         >
+//           Next
+//         </button>
+//       </nav>
+//       <div>
+//         <ul>
+//           {catList.map((cat, i) => (
+//             <li key={cat.id} ref={index === i ? selectedRef : null}>
+//               <img
+//                 className={index === i ? "active" : ""}
+//                 src={cat.imageUrl}
+//                 alt={"Cat #" + cat.id}
+//               />
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+//     </>
+//   );
+// }
+
+// const catList = [];
+// for (let i = 0; i < 10; i++) {
+//   catList.push({
+//     id: i,
+//     imageUrl: "https://placekitten.com/250/200?image=" + i,
+//   });
+// }
+
+// 도전4. 별도의 컴포넌트로 검색 필드에 초점 맞추기
+import { useRef } from "react";
+import SearchButton from "./SearchButton.js";
+import SearchInput from "./SearchInput.js";
+
+export default function Page() {
+  const inputRef = useRef(null);
   return (
-    <div>
-      <button
-        onClick={() => {
-          setShow(!show);
-        }}
-      >
-        Toggle with setState
-      </button>
-      <button
-        onClick={() => {
-          ref.current.remove();
-        }}
-      >
-        Remove from the DOM
-      </button>
-      {show && <p ref={ref}>Hello world</p>}
-    </div>
+    <>
+      <nav>
+        <SearchButton
+          onClick={() => {
+            inputRef.current.focus();
+          }}
+        />
+      </nav>
+      <SearchInput ref={inputRef} />
+    </>
   );
 }
